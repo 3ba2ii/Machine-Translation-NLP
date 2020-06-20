@@ -4,6 +4,14 @@ This project is a part of an end-to-end machine translation pipeline that will a
 
 ![Machine Translation](https://www.dynamiclanguage.com/wp-content/uploads/2019/03/blog-heading-1.png)
 
+- [Machine Translation](#machine-translation)
+  - [Description](#description)
+  - [Dataset](#dataset)
+  - [Install Prerequisites](#install-prerequisites)
+  - [Network Architecture](#network-architecture)
+  - [Final Model Code](#final-model-code)
+  - [Authors](#authors)
+  - [Contributing](#contributing)
 
 ## Description
 This project takes any english text and converts it to sequences of integers based on a big enough french and english vocabularies and pass it to a model that returns a probability distribution over possible translations with accuracy > 97%.
@@ -14,7 +22,7 @@ This project takes any english text and converts it to sequences of integers bas
 In this project we will be using [WMT](http://www.statmt.org/), The most common datasets used for machine translation.
 
 
-## Install
+## Install Prerequisites
 This project requires **Python 3** and the following Python libraries installed:
 
 - [NumPy](http://www.numpy.org/)
