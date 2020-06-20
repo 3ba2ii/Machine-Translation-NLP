@@ -1,41 +1,81 @@
-# Introduction
-In this notebook, you will build a deep neural network that functions as part of an end-to-end machine translation pipeline. Your completed pipeline will accept English text as input and return the French translation.
+# Machine Translation
+This project is a part of an end-to-end machine translation pipeline that will accept English text as input and return the French translation.
 
-# Setup
 
-This project requires GPU acceleration to run efficiently. Support is available to use either of the following two methods for accessing GPU-enabled cloud computing resources.
+![Machine Translation](https://www.dynamiclanguage.com/wp-content/uploads/2019/03/blog-heading-1.png)
 
-## Udacity Workspaces (Recommended)
 
-Udacity Workspaces provide remote connection to GPU-enabled instances right from the classroom. Refer to the classroom lesson for this project to find an overview of navigating & using Jupyter notebook Workspaces.
+## Description
+This project takes any english text and converts it to sequences of integers based on a big enough french and english vocabularies and pass it to a model that returns a probability distribution over possible translations with accuracy > 97%.
 
-## Amazon Web Services (Optional)
 
-Please refer to the Udacity instructions for setting up a GPU instance for this project, and refer to the project instructions in the classroom for setup. The recommended AMI should include compatible versions of all required software and libraries to complete the project. [link for AIND students](https://classroom.udacity.com/nanodegrees/nd889/parts/16cf5df5-73f0-4afa-93a9-de5974257236/modules/53b2a19e-4e29-4ae7-aaf2-33d195dbdeba/lessons/2df3b94c-4f09-476a-8397-e8841b147f84/project)
+
+## Dataset
+In this project we will be using [WMT](http://www.statmt.org/), The most common datasets used for machine translation.
+
 
 ## Install
-- Python 3
-- NumPy
-- TensorFlow 1.x
-- Keras 2.x
+This project requires **Python 3** and the following Python libraries installed:
 
-# Submission
-When you are ready to submit your project, do the following steps:
-1. Ensure you pass all points on the [rubric](https://review.udacity.com/#!/rubrics/1004/view).
-2. Submit the following in a zip file:
-  - `helper.py`
-  - `machine_translation.ipynb`
-  - `machine_translation.html`
+- [NumPy](http://www.numpy.org/)
+- [TensorFlow](https://www.tensorflow.org) 1.x
+- [Keras](https://keras.io) 2.x
 
-## Converting to HTML
+## Network Architecture 
+After tokenizing the text and make all pre-processes to it we pass it to a ```Word Embedding``` layer then to 2 ```Bidirectional LSTM``` with 256 units then ```TimeDistributed``` layer with a ```softmax``` activation function to produce probability distribution.
+![](https://i.ibb.co/0sKYNHt/Screen-Shot-2020-06-20-at-5-48-59-PM.png)
 
-There are several ways to generate an HTML copy of the notebook:
 
- - Running the last cell of the notebook will export an HTML copy
 
- - Navigating to **File -> Download as -> HTML (.html)** within the notebook
 
- - Using `nbconvert` from the command line
+## Final Model Code
 
-    $ pip install nbconvert
-    $ nbconvert machine_translation.ipynb
+After training this model for 10 epochs we were able to get accuracy of 98% over both the training and validation sets.
+
+
+```python
+
+def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
+    """
+    Build and train a model that incorporates embedding, encoder-decoder, and bidirectional RNN on x and y
+    :param input_shape: Tuple of input shape
+    :param output_sequence_length: Length of output sequence
+    :param english_vocab_size: Number of unique English words in the dataset
+    :param french_vocab_size: Number of unique French words in the dataset
+    :return: Keras model built, but not trained
+    """
+   
+    learning_rate=5e-3
+    
+    model=Sequential()
+    model.add(Embedding(english_vocab_size,256,
+                      input_length=input_shape[1]))
+
+    model.add(Bidirectional(LSTM(256),))
+
+    model.add(RepeatVector(output_sequence_length))
+
+    model.add(Bidirectional(LSTM(256,return_sequences=True)))
+
+    model.add(TimeDistributed(Dense(french_vocab_size,
+                              activation='softmax')))
+    
+    model.compile(loss=sparse_categorical_crossentropy,
+                  optimizer=Adam(learning_rate),
+                  metrics=['accuracy'])
+    
+    print(model.summary())
+    return model
+
+```
+> you can find all model trials in the notebook
+
+## Authors
+
+- **Ahmed Abd-Elbakey Ghonem** - [**Github**](https://github.com/3ba2ii)
+
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
