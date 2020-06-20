@@ -4,7 +4,9 @@ This project is a part of an end-to-end machine translation pipeline that will a
 
 ![Machine Translation](https://www.dynamiclanguage.com/wp-content/uploads/2019/03/blog-heading-1.png)
 
+## Content 
 - [Machine Translation](#machine-translation)
+  - [Content](#content)
   - [Description](#description)
   - [Dataset](#dataset)
   - [Install Prerequisites](#install-prerequisites)
